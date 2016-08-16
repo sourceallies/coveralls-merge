@@ -1,15 +1,14 @@
-var execSync = require('child_process').execSync;
+import {execSync} from 'child_process';
+
+const USERNAME_EMAIL_REGEX = /(?:author|committer)\s((?:\w|\s)+)\s<(.+)>/,
+    BRANCH_REGEX = /\* (\w+)/;
 
 function getHeadId() {
     return execSync('git rev-parse HEAD').toString().trim();
 }
 
 function getNameAndEmailFromLine(line) {
-    const tokens = line.split(' '),
-        name = tokens[1],
-        email = tokens[2].substring(1, tokens[2].length - 1);
-
-    return [name, email];
+    return line.match(USERNAME_EMAIL_REGEX).slice(1, 3)
 }
 
 function getHead() {
@@ -34,7 +33,7 @@ function getHead() {
 function getBranch() {
     const branches = execSync('git branch').toString();
 
-    return branches.match(/\* (\w+)/)[1];
+    return branches.match(BRANCH_REGEX)[1];
 }
 
 function getRemotes() {
