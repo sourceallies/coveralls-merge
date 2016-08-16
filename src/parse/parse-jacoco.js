@@ -9,7 +9,7 @@ import {
 } from '../util/helpers';
 
 function getCoverageFromLine(line) {
-    return [line.$.nr, line.$.mi];
+    return [line.$.nr, line.$.ci];
 }
 
 function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackage, workingDirectory) {
