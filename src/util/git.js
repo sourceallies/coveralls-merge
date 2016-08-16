@@ -53,7 +53,7 @@ function getRemotes() {
     return results;
 }
 
-export default () => ({
+export const getGitInfo = () => ({
     head: getHead(),
     branch: getBranch(),
     remotes: getRemotes()

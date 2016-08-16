@@ -1,4 +1,4 @@
-import getGitInfo from '../../../src/util/git';
+import {getGitInfo} from '../../../src/util/git';
 
 import {expect} from 'chai';
 import Chance from 'chance';
@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 import child_process from 'child_process';
 
-describe.only('Get Git Info', () => {
+describe('Get Git Info', () => {
     let chance,
         sandbox,
         execSyncStub,
