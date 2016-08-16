@@ -27,6 +27,8 @@ describe('POST Data to Coveralls', () => {
     });
 
     it('should throw an error if the COVERALLS_REPO_TOKEN environment variable is not defined', () => {
+        delete process.env.COVERALLS_REPO_TOKEN;
+
         const badSendCall = () => {
             send({});
         };
@@ -51,6 +53,7 @@ describe('POST Data to Coveralls', () => {
             sandbox.stub(Helpers, 'getServiceName').returns(service_name);
             sandbox.stub(Git, 'getGitInfo').returns(git);
             sandbox.stub(request, 'post');
+            sandbox.stub(console, 'log');
 
             send(source_files);
         });
