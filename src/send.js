@@ -1,6 +1,7 @@
 import request from 'request';
 import {execSync} from 'child_process';
 import {getServiceName} from './util/helpers';
+import getGitInfo from './util/git';
 
 module.exports = source_files => {
     const repo_token = process.env.COVERALLS_REPO_TOKEN,
@@ -16,7 +17,8 @@ module.exports = source_files => {
             repo_token,
             service_name,
             source_files,
-            commit_sha
+            commit_sha,
+            git: getGitInfo()
         });
 
     request.post(
