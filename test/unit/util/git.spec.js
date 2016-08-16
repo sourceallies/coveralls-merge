@@ -1,6 +1,6 @@
 import getGitInfo from '../../../src/util/git';
 
-import chai, {expect} from 'chai';
+import {expect} from 'chai';
 import Chance from 'chance';
 import sinon from 'sinon';
 
