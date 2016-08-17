@@ -1,5 +1,5 @@
 {
-  "name": "cover-alls",
+  "name": "@sourceallies/cover-alls",
   "version": "1.0.0",
   "description": "All in one tool for managing coverage reports for Coveralls",
   "main": "index.js",
@@ -21,7 +21,7 @@
     "chance": "^1.0.4",
     "isparta": "^4.0.0",
     "lodash": "^4.15.0",
-    "mocha": "^2.4.5",
+    "mocha": "^3.0.0",
     "proxyquire": "^1.7.10",
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0"
