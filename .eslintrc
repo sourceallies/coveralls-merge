@@ -1,0 +1,43 @@
+{
+  "env": {
+    "mocha": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    // Overrides
+    "no-console": "off",
+    // New Rules
+    "no-extra-parens": "error",
+    "no-prototype-builtins": "error",
+    "no-template-curly-in-string": "error",
+    "dot-location": ["error", "property"],
+    "eqeqeq": ["error", "always"],
+    "no-else-return": "error",
+    "no-empty-function": "error",
+    "no-eq-null": "error",
+    "no-eval": "error",
+    "no-global-assign": "error",
+    "no-implicit-coercion": "error",
+    "no-param-reassign": "error",
+    "no-unmodified-loop-condition": "error",
+    "no-unused-expressions": "error",
+    "array-bracket-spacing": ["error", "never"],
+    "block-spacing": ["error", "always"],
+    "brace-style": "error",
+    "comma-style": "error",
+    "max-len": ["error", { "code": 120, "tabWidth": 4 }],
+    "no-unneeded-ternary": ["error", { "defaultAssignment": true }],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "prefer-arrow-callback": "error",
+    "prefer-template": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "impliedStrict": true
+    },
+    "sourceType": "module"
+  }
+}

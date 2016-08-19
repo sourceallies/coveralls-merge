@@ -3,7 +3,6 @@ import merge from '../../src/merge';
 import path from 'path';
 import {expect} from 'chai';
 import Chance from 'chance';
-import {cloneDeep} from 'lodash';
 
 describe('Merge Coveralls Reports', () => {
     let chance;

@@ -27,7 +27,7 @@ module.exports = source_files => {
         },
         (error, response) => {
             if (error) {
-                throw new Error('Error sending data to Coveralls: ' + error);
+                throw new Error(`Error sending data to Coveralls: ${error}`);
             } else {
                 console.log('POST to Coveralls successful!');
                 console.log('Job URL:', JSON.parse(response.body).url);

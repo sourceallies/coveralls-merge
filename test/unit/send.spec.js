@@ -92,7 +92,7 @@ describe('POST Data to Coveralls', () => {
                         callback(error);
                     };
 
-                expect(errorCallback).to.throw('Error sending data to Coveralls: ' + error);
+                expect(errorCallback).to.throw(`Error sending data to Coveralls: ${error}`);
             });
 
             it('should not throw an error if the request was successful', () => {
