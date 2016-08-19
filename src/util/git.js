@@ -47,20 +47,17 @@ function getBranch() {
 }
 
 function getRemotes() {
-    const results = [],
-        remotes = execSync('git remote -v').toString().split('\n');
+    const remotes = execSync('git remote -v').toString().split('\n');
 
-    remotes.forEach(remote => {
-        if (remote.endsWith('(push)')) {
+    return remotes
+        .filter(remote => remote.endsWith('(push)'))
+        .map(remote => {
             const tokens = remote.split(/\s/).filter(token => token.trim() !== '');
-            results.push({
+            return {
                 name: tokens[0],
                 url: tokens[1]
-            });
-        }
-    });
-
-    return results;
+            }
+        });
 }
 
 export const getGitInfo = () => ({
