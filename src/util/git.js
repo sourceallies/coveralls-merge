@@ -1,24 +1,34 @@
 import {execSync} from 'child_process';
 
-const USERNAME_EMAIL_REGEX = /(?:author|committer)\s((?:\w|\s)+)\s<(.+)>/,
-    BRANCH_REGEX = /\* (\w+)/;
+const USERNAME_EMAIL_REGEX = /(.+)\s<(.+)>/,
+    BRANCH_REGEX = /\* (\w+)/,
+    COMMIT_MESSAGE_REGEX = /\w+\s(.+)/;
 
 function getHeadId() {
     return execSync('git rev-parse HEAD').toString().trim();
 }
 
-function getNameAndEmailFromLine(line) {
-    return line.match(USERNAME_EMAIL_REGEX).slice(1, 3)
+function getCommitMessage() {
+    const message = execSync('git log -1 --pretty=%B --oneline').toString();
+
+    return message.match(COMMIT_MESSAGE_REGEX)[1];
+}
+
+function getAuthorNameAndEmail() {
+    const gitShow = execSync('git show --format="%aN <%aE>" HEAD').toString();
+
+    return gitShow.match(USERNAME_EMAIL_REGEX).slice(1, 3);
+}
+
+function getCommitterNameAndEmail() {
+    const gitShow = execSync('git show --format="%cN <%cE>" HEAD').toString();
+
+    return gitShow.match(USERNAME_EMAIL_REGEX).slice(1, 3);
 }
 
 function getHead() {
-    const catFile = execSync('git cat-file -p HEAD').toString(),
-        catFileLines = catFile.split('\n'),
-        catFileSections = catFileLines
-            .filter(line => line.trim() !== '')
-            .slice(2),
-        [author_name, author_email] = getNameAndEmailFromLine(catFileSections[0]),
-        [committer_name, committer_email] = getNameAndEmailFromLine(catFileSections[1]);
+    const [author_name, author_email] = getAuthorNameAndEmail(),
+        [committer_name, committer_email] = getCommitterNameAndEmail();
 
     return {
         id: getHeadId(),
@@ -26,7 +36,7 @@ function getHead() {
         author_email,
         committer_name,
         committer_email,
-        message: catFileSections[2]
+        message: getCommitMessage()
     };
 }
 

@@ -39,6 +39,26 @@ describe('Get Git Info', () => {
         return lines.join('\n');
     }
 
+    function createFakeCommitMessage() {
+        message = chance.paragraph();
+
+        return `${chance.hash({length: 7})} ${message}`;
+    }
+
+    function createFakeAuthorShow() {
+        author_name = chance.pick([chance.name(), chance.first()]);
+        author_email = chance.email();
+
+        return `${author_name} <${author_email}>${'\n'}`;
+    }
+
+    function createFakeCommitterShow() {
+        committer_name = chance.pick([chance.name(), chance.first()]);
+        committer_email = chance.email();
+
+        return `${committer_name} <${committer_email}>${'\n'}`;
+    }
+
     function createFakeBranches() {
         const randomSize = chance.natural({min: 2, max: 5}),
             randomBranches = chance.n(chance.word, randomSize),
@@ -83,9 +103,19 @@ describe('Get Git Info', () => {
         execSyncStub = sandbox.stub(child_process, 'execSync').returns();
 
         execSyncStub
-            .withArgs('git cat-file -p HEAD')
+            .withArgs('git log -1 --pretty=%B --oneline')
             .returns({
-                toString: createFakeCatFile
+                toString: createFakeCommitMessage
+            });
+        execSyncStub
+            .withArgs('git show --format="%aN <%aE>" HEAD')
+            .returns({
+                toString: createFakeAuthorShow
+            });
+        execSyncStub
+            .withArgs('git show --format="%cN <%cE>" HEAD')
+            .returns({
+                toString: createFakeCommitterShow
             });
         execSyncStub
             .withArgs('git branch')
