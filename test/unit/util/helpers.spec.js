@@ -132,6 +132,8 @@ describe('Helpers', () => {
             const result = getServiceName();
 
             expect(result).to.equal(randomServiceName);
+
+            delete process.env.COVERALLS_SERVICE_NAME;
         });
     });
 });
