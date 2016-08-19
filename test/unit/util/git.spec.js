@@ -19,26 +19,6 @@ describe('Get Git Info', () => {
         branch,
         remotes;
 
-    function createFakeCatFile() {
-        author_name = chance.pick([chance.name(), chance.first()]);
-        author_email = chance.email();
-        committer_name = chance.pick([chance.name(), chance.first()]);
-        committer_email = chance.email();
-        message = chance.paragraph();
-
-        const lines = [
-            `tree ${chance.hash()}`,
-            `parent ${chance.hash()}`,
-            `author ${author_name} <${author_email}> ${chance.natural()} ${chance.integer()}`,
-            `committer ${committer_name} <${committer_email}> ${chance.natural()} ${chance.integer()}`,
-            '',
-            message,
-            ''
-        ];
-
-        return lines.join('\n');
-    }
-
     function createFakeCommitMessage() {
         message = chance.paragraph();
 
