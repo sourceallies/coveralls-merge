@@ -13,7 +13,10 @@
     "coveralls"
   ],
   "author": "Source Allies",
-  "license": "MIT",
+  "contributors": [
+    "Michael Parker <mparker@sourceallies.com>"
+  ],
+  "license": "APLv2",
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-preset-es2015": "^6.9.0",
