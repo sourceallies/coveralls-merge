@@ -9,7 +9,7 @@
     "eslint": "node node_modules/eslint/bin/eslint.js src/** test/unit/**",
     "prepublish": "npm run verify && npm run build",
     "test": "./node_modules/.bin/mocha",
-    "verify": "npm run eslint && npm run test"
+    "verify": "npm run eslint && npm run test && echo Verify Passed!"
   },
   "keywords": [
     "coveralls"
