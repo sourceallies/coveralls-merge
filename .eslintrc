@@ -70,7 +70,8 @@
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
-      "impliedStrict": true
+      "impliedStrict": true,
+      "experimentalObjectRestSpread": true
     },
     "sourceType": "module"
   }
