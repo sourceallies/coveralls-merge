@@ -8,17 +8,7 @@ const reports = {
     jacoco: parseJacoco
 };
 
-function resolveWorkingDirectory(workingDirectory) {
-    if (workingDirectory) {
-        return path.resolve(process.cwd(), workingDirectory);
-    }
-
-    return process.cwd();
-}
-
-module.exports = options => {
-    const {type, reportFile} = options;
-
+export default ({reportFile, type, projectRoot, workingDirectory = '.'}) => {
     if (!reportFile) {
         throw new Error('Missing required parameter `reportFile`');
     }
@@ -28,9 +18,11 @@ module.exports = options => {
     }
 
     if (reports[type]) {
-        options.workingDirectory = resolveWorkingDirectory(options.workingDirectory);
-
-        return reports[type](options);
+        return reports[type]({
+            reportFile,
+            projectRoot,
+            workingDirectory: path.resolve(projectRoot, workingDirectory)
+        });
     }
 
     throw new Error(`Unsupported report type. Supported types are ${Object.keys(reports).join(', ')}`);

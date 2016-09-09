@@ -1,9 +1,8 @@
-import send from '../../src/send';
+import post from '../../src/post';
 
-import chai, {expect} from 'chai';
+import {expect} from 'chai';
 import Chance from 'chance';
 import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 
 import * as Helpers from '../../src/util/helpers';
 import * as Git from '../../src/util/git';
@@ -12,10 +11,6 @@ import request from 'request';
 describe('POST Data to Coveralls', () => {
     let chance,
         sandbox;
-
-    before(() => {
-        chai.use(sinonChai);
-    });
 
     beforeEach(() => {
         chance = new Chance();
@@ -30,7 +25,7 @@ describe('POST Data to Coveralls', () => {
         delete process.env.COVERALLS_REPO_TOKEN;
 
         const badSendCall = () => {
-            send({});
+            post({});
         };
 
         expect(badSendCall).to.throw('COVERALLS_REPO_TOKEN environment variable not set');
@@ -55,7 +50,7 @@ describe('POST Data to Coveralls', () => {
             sandbox.stub(request, 'post');
             sandbox.stub(console, 'log');
 
-            send(source_files);
+            post(source_files);
         });
 
         afterEach(() => {

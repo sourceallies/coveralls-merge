@@ -1,9 +1,8 @@
 import parse from '../../src/parse';
 
-import chai, {expect} from 'chai';
+import {expect} from 'chai';
 import Chance from 'chance';
 import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 import proxyquire from 'proxyquire';
 
 import path from 'path';
@@ -13,7 +12,6 @@ describe('Parse entry point', () => {
         sandbox;
 
     before(() => {
-        chai.use(sinonChai);
         proxyquire.noCallThru();
     });
 
@@ -65,22 +63,11 @@ describe('Parse entry point', () => {
             parseJacocoStub,
             parseJacocoStubResult;
 
-        function assertStubWasCalledWithOptions(options) {
-            switch (options.type) {
-                case 'lcov':
-                    expect(parseLcovStub).to.have.callCount(1);
-                    expect(parseLcovStub).to.be.calledWith(options);
-                    break;
-                case 'jacoco':
-                    expect(parseJacocoStub).to.have.callCount(1);
-                    expect(parseJacocoStub).to.be.calledWith(options);
-            }
-        }
-
         beforeEach(() => {
             options = {
                 type: chance.pick(['lcov', 'jacoco']),
-                reportFile: chance.string()
+                reportFile: chance.string(),
+                projectRoot: chance.string()
             };
 
             pathResolveResult = chance.string();
@@ -94,28 +81,39 @@ describe('Parse entry point', () => {
             parseWithMocks = proxyquire('../../src/parse', {
                 './parse/parse-lcov': parseLcovStub,
                 './parse/parse-jacoco': parseJacocoStub
-            });
+            }).default;
 
             sandbox.stub(path, 'resolve').returns(pathResolveResult);
             sandbox.stub(process, 'cwd').returns(currentWorkingDirectory);
         });
 
+        function assertStubWasCalledWithArguments({type, reportFile, projectRoot, workingDirectory}) {
+            switch (type) {
+                case 'lcov':
+                    expect(parseLcovStub).to.have.callCount(1);
+                    expect(parseLcovStub).to.be.calledWith({reportFile, projectRoot, workingDirectory});
+                    break;
+                case 'jacoco':
+                    expect(parseJacocoStub).to.have.callCount(1);
+                    expect(parseJacocoStub).to.be.calledWith({reportFile, projectRoot, workingDirectory});
+            }
+        }
+
         it('should resolve the working directory as the current working directory if not given', () => {
             parseWithMocks(options);
-
-            const newOptions = Object.assign({}, options, {
-                workingDirectory: currentWorkingDirectory
+            const expectedArguments = Object.assign({}, options, {
+                workingDirectory: pathResolveResult
             });
 
-            expect(path.resolve).to.have.callCount(0);
-            expect(process.cwd).to.have.callCount(1);
+            expect(path.resolve).to.have.callCount(1);
+            expect(path.resolve).to.be.calledWith(options.projectRoot, '.');
 
-            assertStubWasCalledWithOptions(newOptions);
+            assertStubWasCalledWithArguments(expectedArguments);
         });
 
         it('should append the current directory to the given working directory', () => {
             const workingDirectory = chance.string(),
-                newOptions = Object.assign({}, options, {
+                expectedArguments = Object.assign({}, options, {
                     workingDirectory: pathResolveResult
                 });
 
@@ -123,12 +121,10 @@ describe('Parse entry point', () => {
 
             parseWithMocks(options);
 
-            expect(process.cwd).to.have.callCount(1);
-
             expect(path.resolve).to.have.callCount(1);
-            expect(path.resolve).to.be.calledWith(currentWorkingDirectory, workingDirectory);
+            expect(path.resolve).to.be.calledWith(options.projectRoot, workingDirectory);
 
-            assertStubWasCalledWithOptions(newOptions);
+            assertStubWasCalledWithArguments(expectedArguments);
         });
     });
 });

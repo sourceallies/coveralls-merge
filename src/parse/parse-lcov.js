@@ -12,7 +12,7 @@ function getCoverageFromLine(line) {
     return line.slice(3).split(',').map(number => Number(number));
 }
 
-function convertLcovSectionToCoverallsSourceFile(lcovSection, workingDirectory) {
+function convertLcovSectionToCoverallsSourceFile(lcovSection, projectRoot) {
     const lcovSectionLines = lcovSection.trim().split('\n'),
         coverallsSourceFile = {
             coverage: []
@@ -25,7 +25,7 @@ function convertLcovSectionToCoverallsSourceFile(lcovSection, workingDirectory) 
             const absoluteFilePath = line.slice(3),
                 fileSource = getSourceFromFile(absoluteFilePath);
 
-            coverallsSourceFile.name = getRelativeFilePath(absoluteFilePath, workingDirectory);
+            coverallsSourceFile.name = getRelativeFilePath(absoluteFilePath, projectRoot);
             coverallsSourceFile.source_digest = getSourceDigest(fileSource);
 
             numberOfSourceFileLines = getNumberOfLinesInSource(fileSource);
@@ -53,13 +53,13 @@ function emptySections(section) {
     return section.trim() !== '';
 }
 
-export default ({reportFile, workingDirectory}) => new Promise(resolve => {
-    const lcovReportFilePath = path.resolve(workingDirectory, reportFile),
+export default ({reportFile, projectRoot}) => new Promise(resolve => {
+    const lcovReportFilePath = path.resolve(projectRoot, reportFile),
         lcovContents = getSourceFromFile(lcovReportFilePath),
         lcovSections = lcovContents.split('end_of_record\n'),
         result = lcovSections
             .filter(emptySections)
-            .map(section => convertLcovSectionToCoverallsSourceFile(section, workingDirectory));
+            .map(section => convertLcovSectionToCoverallsSourceFile(section, projectRoot));
 
     resolve(result);
 });

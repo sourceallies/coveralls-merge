@@ -5,16 +5,17 @@ import {
     getSourceFromFile,
     getSourceDigest,
     getNumberOfLinesInSource,
-    padWithNull
+    padWithNull,
+    getRelativeFilePath
 } from '../util/helpers';
 
 function getCoverageFromLine(line) {
     return [line.$.nr, line.$.ci];
 }
 
-function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackage, workingDirectory) {
-    const relativeJavaFilePath = path.join(javaPackage, javaSourceFileXML.$.name),
-        absoluteJavaFilePath = path.resolve(workingDirectory, relativeJavaFilePath),
+function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackagePath, workingDirectory, projectRoot) {
+    const absoluteJavaFilePath = path.resolve(workingDirectory, javaPackagePath, javaSourceFileXML.$.name),
+        relativeJavaFilePath = getRelativeFilePath(absoluteJavaFilePath, projectRoot),
         javaFileSource = getSourceFromFile(absoluteJavaFilePath),
         numberOfSourceFileLines = getNumberOfLinesInSource(javaFileSource),
         coverallsSourceFile = {
@@ -40,11 +41,11 @@ function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPacka
     return coverallsSourceFile;
 }
 
-function handleJavaPackage(javaPackageXML, workingDirectory) {
-    const javaPackage = javaPackageXML.$.name;
+function handleJavaPackage(javaPackageXML, workingDirectory, projectRoot) {
+    const javaPackagePath = javaPackageXML.$.name;
 
     return javaPackageXML.sourcefile.map(javaSourceFileXML =>
-        convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackage, workingDirectory)
+        convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackagePath, workingDirectory, projectRoot)
     );
 }
 
@@ -52,8 +53,8 @@ function combineArrays(a, b) {
     return a.concat(b);
 }
 
-export default ({reportFile, workingDirectory}) => new Promise((resolve, reject) => {
-    const jacocoReportFilePath = path.resolve(workingDirectory, reportFile),
+export default ({reportFile, workingDirectory, projectRoot}) => new Promise((resolve, reject) => {
+    const jacocoReportFilePath = path.resolve(projectRoot, reportFile),
         jacocoContents = getSourceFromFile(jacocoReportFilePath);
 
     parseString(jacocoContents, (error, xml) => {
@@ -62,7 +63,7 @@ export default ({reportFile, workingDirectory}) => new Promise((resolve, reject)
         }
 
         const result = xml.report.package
-            .map(javaPackageXML => handleJavaPackage(javaPackageXML, workingDirectory))
+            .map(javaPackageXML => handleJavaPackage(javaPackageXML, workingDirectory, projectRoot))
             .reduce(combineArrays);
 
         resolve(result);
