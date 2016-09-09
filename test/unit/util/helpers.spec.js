@@ -7,10 +7,9 @@ import {
     getServiceName
 } from '../../../src/util/helpers';
 
-import chai, {expect} from 'chai';
+import {expect} from 'chai';
 import Chance from 'chance';
 import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
 import {cloneDeep} from 'lodash';
 
 import path from 'path';
@@ -21,13 +20,13 @@ describe('Helpers', () => {
     let chance,
         sandbox;
 
-    before(() => {
-        chai.use(sinonChai);
-    });
-
     beforeEach(() => {
         chance = new Chance();
         sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
     });
 
     it('should get the relative file path given the absolute path and the working directory', () => {

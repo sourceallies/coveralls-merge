@@ -2,3 +2,5 @@
 --recursive
 --reporter spec
 --ui bdd
+--require ./test/util/node-env-test.js
+--require ./test/util/chai-plugins.js
