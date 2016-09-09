@@ -41,7 +41,7 @@ describe('Get Git Info', () => {
 
     function createFakeBranches() {
         const randomSize = chance.natural({min: 2, max: 5}),
-            randomBranches = chance.n(chance.word, randomSize),
+            randomBranches = chance.n(chance.string, randomSize),
             randomIndex = chance.natural({min: 0, max: randomSize - 1});
 
         branch = randomBranches[randomIndex];

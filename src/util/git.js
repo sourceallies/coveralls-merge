@@ -1,7 +1,7 @@
 import {execSync} from 'child_process';
 
 const USERNAME_EMAIL_REGEX = /(.+)\s<(.+)>/,
-    BRANCH_REGEX = /\* (\w+)/,
+    BRANCH_REGEX = /\* (.+)/,
     COMMIT_MESSAGE_REGEX = /\w+\s(.+)/;
 
 function getHeadId() {
