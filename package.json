@@ -1,6 +1,6 @@
 {
   "name": "@sourceallies/cover-alls",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "All in one tool for managing coverage reports for Coveralls",
   "main": "index.js",
   "scripts": {
