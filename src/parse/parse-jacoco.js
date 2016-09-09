@@ -52,11 +52,15 @@ function combineArrays(a, b) {
     return a.concat(b);
 }
 
-export default ({reportFile, workingDirectory}) => new Promise(resolve => {
+export default ({reportFile, workingDirectory}) => new Promise((resolve, reject) => {
     const jacocoReportFilePath = path.resolve(workingDirectory, reportFile),
         jacocoContents = getSourceFromFile(jacocoReportFilePath);
 
     parseString(jacocoContents, (error, xml) => {
+        if (error) {
+            return reject(new Error('Failed to parse XML file at ' + jacocoReportFilePath));
+        }
+
         const result = xml.report.package
             .map(javaPackageXML => handleJavaPackage(javaPackageXML, workingDirectory))
             .reduce(combineArrays);
