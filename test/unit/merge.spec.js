@@ -27,7 +27,7 @@ describe('Merge Coveralls Reports', () => {
             expectedResults = givenArguments
                 .map(argument => {
                     argument.report.forEach(sourceFile => {
-                        sourceFile.name = path.join(argument.prefix, sourceFile.name)
+                        sourceFile.name = path.join(argument.prefix, sourceFile.name);
                     });
                     return argument.report;
                 })

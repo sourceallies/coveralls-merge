@@ -3,8 +3,7 @@ import {getServiceName} from './util/helpers';
 import {getGitInfo} from './util/git';
 
 module.exports = source_files => {
-    const repo_token = process.env.COVERALLS_REPO_TOKEN,
-        service_name = getServiceName();
+    const repo_token = process.env.COVERALLS_REPO_TOKEN;
 
     if (!repo_token) {
         throw new Error('COVERALLS_REPO_TOKEN environment variable not set');
@@ -13,7 +12,7 @@ module.exports = source_files => {
     const url = 'https://coveralls.io/api/v1/jobs',
         json = JSON.stringify({
             repo_token,
-            service_name,
+            service_name: getServiceName(),
             source_files,
             git: getGitInfo()
         });

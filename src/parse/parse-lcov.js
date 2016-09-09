@@ -49,14 +49,16 @@ function convertLcovSectionToCoverallsSourceFile(lcovSection, workingDirectory) 
     return coverallsSourceFile;
 }
 
-export default options => new Promise(resolve => {
-    const {reportFile, workingDirectory} = options;
+function emptySections(section) {
+    return section.trim() !== '';
+}
 
+export default ({reportFile, workingDirectory}) => new Promise(resolve => {
     const lcovReportFilePath = path.resolve(workingDirectory, reportFile),
         lcovContents = getSourceFromFile(lcovReportFilePath),
         lcovSections = lcovContents.split('end_of_record\n'),
         result = lcovSections
-            .filter(section => section.trim() !== '')
+            .filter(emptySections)
             .map(section => convertLcovSectionToCoverallsSourceFile(section, workingDirectory));
 
     resolve(result);

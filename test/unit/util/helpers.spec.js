@@ -112,6 +112,7 @@ describe('Helpers', () => {
         function checkEnvironmentVariable(variable, expectedResult) {
             process.env[variable] = chance.string();
             const actualResult = getServiceName();
+
             expect(actualResult).to.equal(expectedResult);
             delete process.env[variable];
         }
@@ -127,6 +128,7 @@ describe('Helpers', () => {
 
         it('should default to the COVERALLS_SERVICE_NAME environment variable', () => {
             const randomServiceName = chance.string();
+
             process.env.COVERALLS_SERVICE_NAME = randomServiceName;
 
             const result = getServiceName();

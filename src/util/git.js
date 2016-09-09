@@ -53,10 +53,11 @@ function getRemotes() {
         .filter(remote => remote.endsWith('(push)'))
         .map(remote => {
             const tokens = remote.split(/\s/).filter(token => token.trim() !== '');
+
             return {
                 name: tokens[0],
                 url: tokens[1]
-            }
+            };
         });
 }
 

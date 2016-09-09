@@ -61,16 +61,14 @@ describe('Get Git Info', () => {
         return {
             name: chance.word(),
             url: chance.url({extensions: ['git']})
-        }
+        };
     }
 
     function createFakeRemotes() {
         remotes = chance.n(createRandomRemote, chance.natural({min: 1, max: 3}));
 
         return remotes
-            .map(remote => {
-                return `${remote.name}\t${remote.url} (fetch)\n${remote.name}\t${remote.url} (push)`;
-            })
+            .map(remote => `${remote.name}\t${remote.url} (fetch)\n${remote.name}\t${remote.url} (push)`)
             .join('\n');
     }
 

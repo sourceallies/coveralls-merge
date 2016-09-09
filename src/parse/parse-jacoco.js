@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'path';
 import {parseString} from 'xml2js';
 
 import {
@@ -48,16 +48,18 @@ function handleJavaPackage(javaPackageXML, workingDirectory) {
     );
 }
 
-export default options => new Promise(resolve => {
-    const {reportFile, workingDirectory} = options;
+function combineArrays(a, b) {
+    return a.concat(b);
+}
 
+export default ({reportFile, workingDirectory}) => new Promise(resolve => {
     const jacocoReportFilePath = path.resolve(workingDirectory, reportFile),
         jacocoContents = getSourceFromFile(jacocoReportFilePath);
 
     parseString(jacocoContents, (error, xml) => {
         const result = xml.report.package
             .map(javaPackageXML => handleJavaPackage(javaPackageXML, workingDirectory))
-            .reduce((a, b) => a.concat(b));
+            .reduce(combineArrays);
 
         resolve(result);
     });
