@@ -58,7 +58,7 @@ export default ({reportFile, workingDirectory}) => new Promise((resolve, reject)
 
     parseString(jacocoContents, (error, xml) => {
         if (error) {
-            return reject(new Error('Failed to parse XML file at ' + jacocoReportFilePath));
+            return reject(new Error(`Failed to parse XML file at ${jacocoReportFilePath}`));
         }
 
         const result = xml.report.package
