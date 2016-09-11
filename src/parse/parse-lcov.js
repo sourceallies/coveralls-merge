@@ -53,13 +53,13 @@ function emptySections(section) {
     return section.trim() !== '';
 }
 
-export default ({reportFile, projectRoot}) => new Promise(resolve => {
-    const lcovReportFilePath = path.resolve(projectRoot, reportFile),
+export default (reportFile, config) => new Promise(resolve => {
+    const lcovReportFilePath = path.resolve(config.projectRoot, reportFile),
         lcovContents = getSourceFromFile(lcovReportFilePath),
         lcovSections = lcovContents.split('end_of_record\n'),
         result = lcovSections
             .filter(emptySections)
-            .map(section => convertLcovSectionToCoverallsSourceFile(section, projectRoot));
+            .map(section => convertLcovSectionToCoverallsSourceFile(section, config.projectRoot));
 
     resolve(result);
 });

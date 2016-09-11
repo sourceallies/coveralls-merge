@@ -4,9 +4,22 @@ import post from './post';
 
 import path from 'path';
 
-module.exports = (reports, rootDirectory = '.') => {
-    const projectRoot = path.resolve(process.cwd(), rootDirectory),
-        reportPromises = reports.map(report => parse({...report, projectRoot}));
+function getProgramConfig(givenConfig) {
+    const defaultConfig = {
+            projectRoot: '.'
+        },
+        config = Object.assign({}, defaultConfig, givenConfig);
+
+    config.projectRoot = path.resolve(process.cwd(), config.projectRoot);
+
+    return config;
+}
+
+module.exports = (reports, givenConfig = {}) => {
+    const config = getProgramConfig(givenConfig),
+        reportPromises = reports.map(report => parse({...report, config}));
+
+    console.log('givenConfig', givenConfig);
 
     Promise.all(reportPromises)
         .then(results => {

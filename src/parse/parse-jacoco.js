@@ -13,8 +13,9 @@ function getCoverageFromLine(line) {
     return [line.$.nr, line.$.ci];
 }
 
-function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackagePath, workingDirectory, projectRoot) {
-    const absoluteJavaFilePath = path.resolve(workingDirectory, javaPackagePath, javaSourceFileXML.$.name),
+function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackagePath, config) {
+    const {workingDirectory, projectRoot} = config,
+        absoluteJavaFilePath = path.resolve(workingDirectory, javaPackagePath, javaSourceFileXML.$.name),
         relativeJavaFilePath = getRelativeFilePath(absoluteJavaFilePath, projectRoot),
         javaFileSource = getSourceFromFile(absoluteJavaFilePath),
         numberOfSourceFileLines = getNumberOfLinesInSource(javaFileSource),
@@ -41,11 +42,11 @@ function convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPacka
     return coverallsSourceFile;
 }
 
-function handleJavaPackage(javaPackageXML, workingDirectory, projectRoot) {
+function handleJavaPackage(javaPackageXML, config) {
     const javaPackagePath = javaPackageXML.$.name;
 
     return javaPackageXML.sourcefile.map(javaSourceFileXML =>
-        convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackagePath, workingDirectory, projectRoot)
+        convertJavaSourceFileToCoverallsSourceFile(javaSourceFileXML, javaPackagePath, config)
     );
 }
 
@@ -53,8 +54,8 @@ function combineArrays(a, b) {
     return a.concat(b);
 }
 
-export default ({reportFile, workingDirectory, projectRoot}) => new Promise((resolve, reject) => {
-    const jacocoReportFilePath = path.resolve(projectRoot, reportFile),
+export default (reportFile, config) => new Promise((resolve, reject) => {
+    const jacocoReportFilePath = path.resolve(config.projectRoot, reportFile),
         jacocoContents = getSourceFromFile(jacocoReportFilePath);
 
     parseString(jacocoContents, (error, xml) => {
@@ -63,7 +64,7 @@ export default ({reportFile, workingDirectory, projectRoot}) => new Promise((res
         }
 
         const result = xml.report.package
-            .map(javaPackageXML => handleJavaPackage(javaPackageXML, workingDirectory, projectRoot))
+            .map(javaPackageXML => handleJavaPackage(javaPackageXML, config))
             .reduce(combineArrays);
 
         resolve(result);

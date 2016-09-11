@@ -54,7 +54,7 @@ describe('Parse entry point', () => {
     });
 
     describe('Given the required parameters are present', () => {
-        let options,
+        let givenArguments,
             pathResolveResult,
             currentWorkingDirectory,
             parseWithMocks,
@@ -64,10 +64,12 @@ describe('Parse entry point', () => {
             parseJacocoStubResult;
 
         beforeEach(() => {
-            options = {
+            givenArguments = {
                 type: chance.pick(['lcov', 'jacoco']),
                 reportFile: chance.string(),
-                projectRoot: chance.string()
+                config: {
+                    projectRoot: chance.string()
+                }
             };
 
             pathResolveResult = chance.string();
@@ -87,44 +89,38 @@ describe('Parse entry point', () => {
             sandbox.stub(process, 'cwd').returns(currentWorkingDirectory);
         });
 
-        function assertStubWasCalledWithArguments({type, reportFile, projectRoot, workingDirectory}) {
-            switch (type) {
+        function assertParseStubWasCalled() {
+            switch (givenArguments.type) {
                 case 'lcov':
                     expect(parseLcovStub).to.have.callCount(1);
-                    expect(parseLcovStub).to.be.calledWith({reportFile, projectRoot, workingDirectory});
+                    expect(parseLcovStub).to.be.calledWith(givenArguments.reportFile, givenArguments.config);
                     break;
                 case 'jacoco':
                     expect(parseJacocoStub).to.have.callCount(1);
-                    expect(parseJacocoStub).to.be.calledWith({reportFile, projectRoot, workingDirectory});
+                    expect(parseJacocoStub).to.be.calledWith(givenArguments.reportFile, givenArguments.config);
             }
         }
 
         it('should resolve the working directory as the current working directory if not given', () => {
-            parseWithMocks(options);
-            const expectedArguments = Object.assign({}, options, {
-                workingDirectory: pathResolveResult
-            });
+            parseWithMocks(givenArguments);
 
             expect(path.resolve).to.have.callCount(1);
-            expect(path.resolve).to.be.calledWith(options.projectRoot, '.');
+            expect(path.resolve).to.be.calledWith(givenArguments.config.projectRoot, '.');
 
-            assertStubWasCalledWithArguments(expectedArguments);
+            assertParseStubWasCalled();
         });
 
         it('should append the current directory to the given working directory', () => {
-            const workingDirectory = chance.string(),
-                expectedArguments = Object.assign({}, options, {
-                    workingDirectory: pathResolveResult
-                });
+            const workingDirectory = chance.string();
 
-            options.workingDirectory = workingDirectory;
+            givenArguments.workingDirectory = workingDirectory;
 
-            parseWithMocks(options);
+            parseWithMocks(givenArguments);
 
             expect(path.resolve).to.have.callCount(1);
-            expect(path.resolve).to.be.calledWith(options.projectRoot, workingDirectory);
+            expect(path.resolve).to.be.calledWith(givenArguments.config.projectRoot, workingDirectory);
 
-            assertStubWasCalledWithArguments(expectedArguments);
+            assertParseStubWasCalled();
         });
     });
 });
