@@ -18,9 +18,15 @@ reports for both parts of the codebase, then this tool may be for you.
 npm i cover-alls --save-dev
 ```
 
-## API
+## Usage
 
-`sendReports(reports, options);`
+```js
+const coveralls = require('cover-alls');
+
+// Create reports and options
+
+coveralls.sendReports(reports, options);
+```
 
 `reports` is an array of Objects representing a coverage report:
 
