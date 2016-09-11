@@ -20,24 +20,26 @@ npm i cover-alls --save-dev
 
 ## API
 
+`sendReports(reports, options);`
 
-`parse()`
+`reports` is an array of Objects representing a coverage report:
 
-Given a report type and a report file, return a coverage report consisting of an array of
-[Coveralls Source Files](https://coveralls.zendesk.com/hc/en-us/articles/201774865-API-Introduction).
+| key              | value                                                                                                                                                                                                                                                                                          | required |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| `type`             | String representing the type of coverage report. See [Supported Report Formats](#supported-report-formats)                                                                                                                                                                                       | yes      |
+| `reportFile`       | Path to the coverage report file, relative to the project root                                                                                                                                                                                                                                 | yes      |
+| `workingDirectory` | Path representing the working directory of the coverage report,  relative to the project root.  This is added as a prefix to the paths specified in the coverage report, and used by Coveralls to determine the location of the source file.  The default value is the project root directory. | no       |
 
-`merge()`
+`options` is an optional parameter, which is an Object with the following configuration values:
 
-Given one or more coverage reports returned from `parse()`, combine these reports together.
-
-`send()`
-
-Given the result returned from `merge()`, POST the combined reports to Coveralls.
+| key         | value                                                                         | default |
+|-------------|-------------------------------------------------------------------------------|---------|
+| `projectRoot` | The root directory of the project, relative to the current working directory. | `'.'`   |
 
 ## Supported Report Formats
 
-- LCOV
-- JaCoCo XML
+- LCOV: `lcov`
+- JaCoCo XML: `jacoco`
 
 This tool was initially written to support the languages I needed at the time, but it is implemented in a way that
 makes adding additional formats painless. If the format you need is not currently supported, feel free to open an
