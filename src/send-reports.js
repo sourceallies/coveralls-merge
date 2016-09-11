@@ -19,8 +19,6 @@ module.exports = (reports, givenConfig = {}) => {
     const config = getProgramConfig(givenConfig),
         reportPromises = reports.map(report => parse({...report, config}));
 
-    console.log('givenConfig', givenConfig);
-
     Promise.all(reportPromises)
         .then(results => {
             const mergedResults = merge(results);

@@ -23,5 +23,5 @@ export default ({reportFile, type, workingDirectory = '.', config}) => {
         return reports[type](reportFile, config);
     }
 
-    throw new Error(`Unsupported report type. Supported types are ${Object.keys(reports).join(', ')}`);
+    throw new Error(`Unsupported report type "${type}". Supported types are ${Object.keys(reports).join(', ')}`);
 };

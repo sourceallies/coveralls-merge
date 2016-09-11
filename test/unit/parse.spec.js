@@ -43,14 +43,15 @@ describe('Parse entry point', () => {
     });
 
     it('should throw an error when an invalid report type is given', () => {
-        const badParseCall = () => {
-            parse({
-                reportFile: chance.string(),
-                type: chance.string()
-            });
-        };
+        const badType = chance.string(),
+            badParseCall = () => {
+                parse({
+                    reportFile: chance.string(),
+                    type: badType
+                });
+            };
 
-        expect(badParseCall).to.throw('Unsupported report type. Supported types are lcov, jacoco');
+        expect(badParseCall).to.throw(`Unsupported report type "${badType}". Supported types are lcov, jacoco`);
     });
 
     describe('Given the required parameters are present', () => {
