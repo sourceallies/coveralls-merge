@@ -1,4 +1,4 @@
-import post from '../../src/post';
+import {post} from '../../src/post';
 
 import {expect} from 'chai';
 import Chance from 'chance';

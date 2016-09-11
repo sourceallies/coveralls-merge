@@ -1,4 +1,4 @@
-import merge from '../../src/merge';
+import {merge} from '../../src/merge';
 
 import {expect} from 'chai';
 import Chance from 'chance';

@@ -8,7 +8,7 @@ const reports = {
     jacoco: parseJacoco
 };
 
-export default ({reportFile, type, workingDirectory = '.', config}) => {
+export const parse = ({reportFile, type, workingDirectory = '.'}, config) => {
     if (!reportFile) {
         throw new Error('Missing required parameter `reportFile`');
     }

@@ -1,1 +1,1 @@
-export default reports => reports.reduce((a, b) => a.concat(b));
+export const merge = reports => reports.reduce((a, b) => a.concat(b));

@@ -2,7 +2,7 @@ import request from 'request';
 import {getServiceName} from './util/helpers';
 import {getGitInfo} from './util/git';
 
-export default source_files => {
+export const post = source_files => {
     const repo_token = process.env.COVERALLS_REPO_TOKEN;
 
     if (!repo_token) {
