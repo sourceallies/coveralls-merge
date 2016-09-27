@@ -1,4 +1,4 @@
-# cover-alls
+# coveralls-merge
 A tool that can be used to parse test coverage results, merge reports together, and POST them to coveralls.io.
 
 ## The Problem
