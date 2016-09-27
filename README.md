@@ -20,6 +20,8 @@ npm i cover-alls --save-dev
 
 ## Usage
 
+### API
+
 ```js
 const coveralls = require('cover-alls');
 
@@ -41,6 +43,10 @@ coveralls.sendReports(reports, options);
 | key         | value                                                                         | default |
 |-------------|-------------------------------------------------------------------------------|---------|
 | `projectRoot` | The root directory of the project, relative to the current working directory. | `'.'`   |
+
+### Repo Token
+
+This tool reads the Coveralls repository token from the environment variable `COVERALLS_REPO_TOKEN`.  Failing to set this environment variable will cause the tool to throw an error.
 
 ## Supported Report Formats
 
