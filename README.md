@@ -15,7 +15,7 @@ reports for both parts of the codebase, then this tool may be for you.
 ## Installation
 
 ``` bash
-npm i cover-alls --save-dev
+npm i @sourceallies/coveralls-merge --save-dev
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ npm i cover-alls --save-dev
 ### API
 
 ```js
-const coveralls = require('cover-alls');
+const coveralls = require('@sourceallies/coveralls-merge');
 
 // Create reports and options
 
