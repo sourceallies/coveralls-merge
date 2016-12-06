@@ -1,6 +1,6 @@
 {
   "name": "@sourceallies/coveralls-merge",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "All in one tool for managing coverage reports for Coveralls",
   "main": "index.js",
   "scripts": {
